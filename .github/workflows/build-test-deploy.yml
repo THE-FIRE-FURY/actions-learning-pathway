@@ -1,6 +1,11 @@
 name: build-test-deploy
 on: push
 jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: stefanoeb/eslint-action@1.0.2
   build:
     runs-on: ubuntu-latest
     steps:
@@ -11,10 +16,6 @@ jobs:
         with:
           node-version: '18.x'
       - run: npm install                
-      - name: Install modules
-        run: yarn
-      - name: Run ESLint
-        run: eslint . --ext .js,.jsx,.ts,.tsx
       - run: npm run build
   test: 
     needs: build
@@ -27,8 +28,4 @@ jobs:
         with:
           node-version: '18.x'
       - run: npm install
-      - name: Install modules
-        run: yarn
-      - name: Run ESLint
-        run: eslint . --ext .js,.jsx,.ts,.tsx
       - run: npm test
