@@ -3,27 +3,7 @@ on:
   push:
     branches:
       - main
-jobs:
-   run-linters:
-    name: Run linters
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
-
-      # ESLint and Prettier must be in `package.json`
-      - name: Install Node.js dependencies
-        run: npm ci
-      - name: Run linters
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
-          prettier: true
+jobs:   
    build:
     runs-on: ubuntu-latest
     steps:
@@ -33,7 +13,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
-      - run: npm install                
+      - run: npm install  
+      - run: npm i eslint --save-dev
+      - run: npx install-peerdeps --dev eslint-config-airbnb      
       - run: npm run build
    test: 
     needs: build
@@ -46,4 +28,6 @@ jobs:
         with:
           node-version: '18.x'
       - run: npm install
+      - run: npm i eslint --save-dev
+      - run: npx install-peerdeps --dev eslint-config-airbnb  
       - run: npm test
